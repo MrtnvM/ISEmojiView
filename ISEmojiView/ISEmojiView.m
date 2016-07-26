@@ -31,9 +31,22 @@ static const CGFloat EmojiFontSize = 32;
         self.emojis = [NSArray arrayWithContentsOfFile:plistPath];
         
         //init frames
-        CGRect emojiFrame = CGRectMake(10, 30, frame.size.width - 55, frame.size.height - 30);
-        CGRect pageControlFrame = CGRectMake(0, 0, frame.size.width, 30);
-        CGRect backButtonFrame = CGRectMake(frame.size.width - 55, 30, 55, frame.size.height - 30);
+        CGFloat pageControlFrameHeight = 25;
+        CGFloat buttonBackspaceFrameWidth = 55;
+        CGRect emojiFrame = CGRectMake(0,
+                                       pageControlFrameHeight,
+                                       frame.size.width - buttonBackspaceFrameWidth,
+                                       frame.size.height - pageControlFrameHeight);
+        
+        CGRect pageControlFrame = CGRectMake(0,
+                                             0,
+                                             frame.size.width,
+                                             pageControlFrameHeight);
+        
+        CGRect backButtonFrame = CGRectMake(frame.size.width - buttonBackspaceFrameWidth,
+                                            pageControlFrameHeight,
+                                            buttonBackspaceFrameWidth,
+                                            frame.size.height - pageControlFrameHeight);
         
         //
         NSInteger rowNum = (CGRectGetHeight(emojiFrame) / EmojiHeight);
@@ -70,7 +83,7 @@ static const CGFloat EmojiFontSize = 32;
                 column = 0; // The number of columns is 0
             }
             
-            CGRect currentRect = CGRectMake(((page-1) * emojiFrame.size.width) + (column * EmojiWidth),
+            CGRect currentRect = CGRectMake(((page-1) * emojiFrame.size.width) + (column * EmojiWidth) + 10,
                                             row * EmojiHeight,
                                             EmojiWidth,
                                             EmojiHeight);
@@ -104,31 +117,8 @@ static const CGFloat EmojiFontSize = 32;
         [self addSubview:self.pageControl];
         
         [self initBackspaceButtonWithFrame:backButtonFrame];
-        
-        [self initBordersWithFrame:frame];
     }
     return self;
-}
-
-- (void)initBordersWithFrame: (CGRect)frame {
-    UIView * borderLeft = [[UIView alloc] initWithFrame:CGRectMake(0,
-                                                                   0,
-                                                                   6,
-                                                                   frame.size.height)];
-    borderLeft.backgroundColor = [UIColor whiteColor];
-    [self addSubview:borderLeft];
-    UIView * borderRight = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width - 6,
-                                                                    0,
-                                                                    6,
-                                                                    frame.size.height)];
-    borderRight.backgroundColor = [UIColor whiteColor];
-    [self addSubview:borderRight];
-    UIView * borderBottom = [[UIView alloc] initWithFrame:CGRectMake(0,
-                                                                     frame.size.height - 6,
-                                                                     frame.size.width,
-                                                                     6)];
-    borderBottom.backgroundColor = [UIColor whiteColor];
-    [self addSubview:borderBottom];
 }
 
 - (void)initBackspaceButtonWithFrame:(CGRect)backSpaceFrame {
@@ -140,10 +130,10 @@ static const CGFloat EmojiFontSize = 32;
     [deleteButton addTarget:self
                      action:@selector(deleteButtonPressed:)
            forControlEvents:UIControlEventTouchUpInside];
-    deleteButton.frame = CGRectMake(CGRectGetMaxX(backSpaceFrame) - deleteButton.imageView.image.size.width - 3,
-                                    backSpaceFrame.origin.y,
-                                    deleteButton.imageView.image.size.width/1.5f,
-                                    deleteButton.imageView.image.size.height/1.5f);
+    deleteButton.frame = CGRectMake(backSpaceFrame.origin.x,
+                                    backSpaceFrame.origin.y - 25,
+                                    backSpaceFrame.size.width,
+                                    deleteButton.imageView.image.size.height + 25 * 2);
     deleteButton.tintColor = [UIColor blackColor];
     [self addSubview:deleteButton];
 
