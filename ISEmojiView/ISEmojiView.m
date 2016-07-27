@@ -9,7 +9,7 @@
 #import "ISEmojiView.h"
 
 static const CGFloat EmojiWidth = 43;
-static const CGFloat EmojiHeight = 43;
+static const CGFloat EmojiHeight = 44;
 static const CGFloat EmojiFontSize = 32;
 
 @interface ISEmojiView()<UIScrollViewDelegate>
@@ -25,7 +25,7 @@ static const CGFloat EmojiFontSize = 32;
 -(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor colorWithRed:0.88 green:0.88 blue:0.90 alpha:1.0f];
+        self.backgroundColor = [UIColor colorWithRed: 211/255.0 green:215/255.0 blue:219/255.0 alpha:1.0f];
         // init emojis
         NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"ISEmojiList" ofType:@"plist"];
         self.emojis = [NSArray arrayWithContentsOfFile:plistPath];
@@ -83,19 +83,20 @@ static const CGFloat EmojiFontSize = 32;
                 column = 0; // The number of columns is 0
             }
             
-            CGRect currentRect = CGRectMake(((page-1) * emojiFrame.size.width) + (column * EmojiWidth) + 10,
+            CGFloat pageLeftMargin = 7;
+            CGRect currentRect = CGRectMake(((page-1) * emojiFrame.size.width) + (column * EmojiWidth) + pageLeftMargin,
                                             row * EmojiHeight,
                                             EmojiWidth,
                                             EmojiHeight);
             
             NSString *emoji = self.emojis[emojiPointer++];
-                
+            
             // init Emoji Button
             UIButton *emojiButton = [UIButton buttonWithType:UIButtonTypeCustom];
             emojiButton.titleLabel.font = [UIFont fontWithName:@"Apple color emoji" size:EmojiFontSize];
             [emojiButton setTitle:emoji forState:UIControlStateNormal];
             [emojiButton addTarget:self action:@selector(emojiButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-                
+            
             emojiButton.frame = currentRect;
             [self.scrollView addSubview:emojiButton];
             
@@ -130,13 +131,14 @@ static const CGFloat EmojiFontSize = 32;
     [deleteButton addTarget:self
                      action:@selector(deleteButtonPressed:)
            forControlEvents:UIControlEventTouchUpInside];
+    CGFloat deleteButtonHeightSpace = 25;
     deleteButton.frame = CGRectMake(backSpaceFrame.origin.x,
-                                    backSpaceFrame.origin.y - 25,
+                                    backSpaceFrame.origin.y - deleteButtonHeightSpace + 10,
                                     backSpaceFrame.size.width,
-                                    deleteButton.imageView.image.size.height + 25 * 2);
+                                    deleteButton.imageView.image.size.height + deleteButtonHeightSpace * 2);
     deleteButton.tintColor = [UIColor blackColor];
     [self addSubview:deleteButton];
-
+    
 }
 
 #pragma mark - Service methods
